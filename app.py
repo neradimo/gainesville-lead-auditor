@@ -41,6 +41,14 @@ if uploaded_file:
     df.loc[df['Name'].str.contains('|'.join(blacklist), case=False, na=False), 'Quality_Label'] = '🚩 Junk/Bot'
     df.loc[df['phone_len'] < 10, 'Quality_Label'] = '🚩 Junk/Bot'
 
+    # Force-flag known bot signatures or bad phone lengths
+    blacklist = ['BOT', 'TEST', 'FAKE']
+    is_bot = df['Name'].str.contains('|'.join(blacklist), case=False, na=False)
+    is_bad_phone = df['phone_len'] < 10
+
+    # This override ensures they NEVER end up in the 'Good' pile
+    df.loc[is_bot | is_bad_phone, 'Quality_Label'] = '🚩 Junk/Bot'
+
     # 5. DISPLAY RESULTS
     st.subheader("Audit Preview")
     st.dataframe(df[['Name', 'Email', 'Phone', 'Quality_Label']].head(10))
@@ -57,4 +65,5 @@ if uploaded_file:
         data=output.getvalue(),
         file_name="Lead_Audit_Results.xlsx",
         mime="application/vnd.ms-excel"
+
     )
