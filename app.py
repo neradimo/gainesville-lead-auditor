@@ -5,6 +5,7 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
 import io
 
+st.set_page_config(page_title="Florida Lead Auditor", page_icon="🌴")
 st.title("🌴 Florida Real Estate Lead Auditor")
 
 # 1. Clear Instructions
@@ -49,8 +50,6 @@ if uploaded_file:
     # ... rest of your AI logic continues here ...
 
 # 1. PAGE SETUP
-st.set_page_config(page_title="Florida Lead Auditor", page_icon="🌴")
-st.title("🌴 Florida Real Estate Lead Auditor")
 st.markdown("Upload your messy CSV/Excel and let the AI find the junk.")
 
 # 2. FILE UPLOADER
@@ -110,5 +109,6 @@ if uploaded_file:
         mime="application/vnd.ms-excel"
 
     )
+
 
 
