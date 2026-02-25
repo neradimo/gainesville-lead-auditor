@@ -5,6 +5,51 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
 import io
 
+# --- ADD THIS TO THE TOP OF app.py ---
+
+st.title("🌴 Florida Real Estate Lead Auditor")
+
+# 1. Clear Instructions
+st.markdown("""
+### 🚀 How to use this tool:
+1. Export your leads from your CRM as a **CSV** or **Excel** file.
+2. Ensure your file has these 3 column headers: **Name**, **Email**, and **Phone**.
+3. Drag and drop the file below to start the AI Audit.
+""")
+
+# 2. Add a Sample Template (so they can't fail)
+sample_data = pd.DataFrame({
+    'Name': ['Jane Smith', 'ALACHUA_BOT'],
+    'Email': ['jane@gmail.com', 'bot@test.ru'],
+    'Phone': ['352-555-0199', '0000000000']
+})
+st.download_button(
+    label="📥 Download Example Format",
+    data=sample_data.to_csv(index=False).encode('utf-8'),
+    file_name="lead_audit_template.csv",
+    mime="text/csv",
+)
+
+st.divider() # Visual separator
+
+# 3. File Uploader with Error Handling
+uploaded_file = st.file_uploader("Upload Lead List", type=["csv", "xlsx"])
+
+if uploaded_file:
+    # Load data
+    df = pd.read_csv(uploaded_file) if uploaded_file.name.endswith('.csv') else pd.read_excel(uploaded_file)
+    
+    # --- SAFETY CHECK ---
+    required = ['Name', 'Email', 'Phone']
+    missing = [c for c in required if c not in df.columns]
+    
+    if missing:
+        st.error(f"❌ **Upload Failed:** Your file is missing these columns: {', '.join(missing)}")
+        st.info("Please rename your columns to match the template and try again.")
+        st.stop() # Prevents the AI model from running and crashing
+    
+    # ... rest of your AI logic continues here ...
+
 # 1. PAGE SETUP
 st.set_page_config(page_title="Florida Lead Auditor", page_icon="🌴")
 st.title("🌴 Florida Real Estate Lead Auditor")
@@ -67,3 +112,4 @@ if uploaded_file:
         mime="application/vnd.ms-excel"
 
     )
+
