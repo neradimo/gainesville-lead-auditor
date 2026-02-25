@@ -5,8 +5,6 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import LabelEncoder
 import io
 
-# --- ADD THIS TO THE TOP OF app.py ---
-
 st.title("🌴 Florida Real Estate Lead Auditor")
 
 # 1. Clear Instructions
@@ -112,4 +110,5 @@ if uploaded_file:
         mime="application/vnd.ms-excel"
 
     )
+
 
