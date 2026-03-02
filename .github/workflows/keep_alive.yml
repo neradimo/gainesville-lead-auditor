@@ -1,0 +1,28 @@
+name: Streamlit Keep Alive
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
+  workflow_dispatch:       # Allows you to click a button to run it manually
+
+permissions:
+  contents: write          # Gives the bot permission to update your repo
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Update Heartbeat File
+        run: |
+          echo "Last Heartbeat: $(date)" > heartbeat.txt
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Gainesville-Bot"
+          git config --global user.email "bot@gainesvilleaudit.com"
+          git add heartbeat.txt
+          git commit -m "Automated Heartbeat - Waking up Streamlit"
+          git push
